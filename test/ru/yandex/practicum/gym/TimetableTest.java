@@ -21,7 +21,7 @@ public class TimetableTest {
         //Проверить, что за понедельник вернулось одно занятие
         Assertions.assertEquals(new ArrayList<>(List.of(singleTrainingSession)), timetable.getTrainingSessionsForDayAndTime(DayOfWeek.MONDAY, new TimeOfDay(13, 0)));
         //Проверить, что за вторник не вернулось занятий
-        Assertions.assertNull(timetable.getTrainingSessionsForDayAndTime(DayOfWeek.TUESDAY, new TimeOfDay(13, 0)));
+        Assertions.assertEquals(Collections.emptyList(), timetable.getTrainingSessionsForDayAndTime(DayOfWeek.TUESDAY, new TimeOfDay(13, 0)));
     }
 
     @Test
@@ -121,5 +121,23 @@ public class TimetableTest {
         timetable.addNewTrainingSession(saturdayChildTrainingSession);
 
         Assertions.assertEquals(3, timetable.getCountByCoaches().get(0).getCounter());
+    }
+
+    @Test
+    void testGetCountByCoachesIfSameTimeTraining() {
+        Timetable timetable = new Timetable();
+
+        Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
+
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+        TrainingSession mondayChildTrainingSession1 = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+        TrainingSession mondayChildTrainingSession2 = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+
+        timetable.addNewTrainingSession(mondayChildTrainingSession1);
+        timetable.addNewTrainingSession(mondayChildTrainingSession2);
+
+        Assertions.assertEquals(2, timetable.getCountByCoaches().get(0).getCounter());
     }
 }

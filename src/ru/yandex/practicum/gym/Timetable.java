@@ -42,7 +42,7 @@ public class Timetable {
         if (timetable.containsKey(dayOfWeek)) {
             return timetable.get(dayOfWeek).get(timeOfDay);
         } else {
-            return null;
+            return Collections.emptyList();
         }
     }
 
